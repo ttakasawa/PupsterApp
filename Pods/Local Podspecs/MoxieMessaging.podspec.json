@@ -1,0 +1,22 @@
+{
+  "name": "MoxieMessaging",
+  "version": "0.1.0",
+  "summary": "A short description of MoxieMessaging.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/ttakasawa/MoxieMessaging",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "ttakasawa": "tom_takasawa@icloud.com"
+  },
+  "source": {
+    "git": "https://github.com/ttakasawa/MoxieMessaging.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "MoxieMessaging/Classes/**/*"
+}

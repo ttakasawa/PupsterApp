@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SFProText-Semibold.ttf">
+            <string>SFProText-Semibold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PupsterTabBar" customModule="moxie" customModuleProvider="target">
+            <connections>
+                <outlet property="activitiesImageview" destination="DoH-sH-DtZ" id="bt9-bo-2F8"/>
+                <outlet property="activitiesLbl" destination="fPp-ww-mEP" id="ath-6E-Ix1"/>
+                <outlet property="productsImageview" destination="1f4-iz-PVd" id="dbY-Ap-rkg"/>
+                <outlet property="productsLbl" destination="lhJ-DW-jtl" id="YFW-v4-dHL"/>
+                <outlet property="trackingImageview" destination="DeC-9r-wvw" id="2EI-nt-pzZ"/>
+                <outlet property="trackingLbl" destination="cgY-OW-0Pe" id="7m2-xw-p5U"/>
+                <outlet property="view" destination="iN0-l3-epB" id="5aC-S8-qdk"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="72"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trophy" translatesAutoresizingMaskIntoConstraints="NO" id="DeC-9r-wvw">
+                    <rect key="frame" x="175" y="19" width="25" height="28"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="25" id="H26-lD-87c"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TRACKING" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cgY-OW-0Pe">
+                    <rect key="frame" x="158.5" y="53" width="58" height="13"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="13" id="Y4h-iX-Vgc"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="11"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xAE-k7-iTD">
+                    <rect key="frame" x="158" y="19" width="58" height="47"/>
+                    <connections>
+                        <action selector="trackingTapped:" destination="-1" eventType="touchUpInside" id="K9w-id-dSI"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h8C-uY-nt0">
+                    <rect key="frame" x="52.5" y="26" width="64" height="40"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ACTIVITIES" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fPp-ww-mEP">
+                            <rect key="frame" x="0.0" y="27" width="64" height="13"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="13" id="h6H-Gd-sVX"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="11"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cards" translatesAutoresizingMaskIntoConstraints="NO" id="DoH-sH-DtZ">
+                            <rect key="frame" x="20.5" y="0.0" width="22" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="22" id="0te-cT-6SN"/>
+                                <constraint firstAttribute="width" constant="22" id="zRB-pM-79e"/>
+                            </constraints>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kII-1Z-Qeb">
+                            <rect key="frame" x="0.0" y="0.0" width="64" height="40"/>
+                            <connections>
+                                <action selector="activitiesTapped:" destination="-1" eventType="touchUpInside" id="dpL-Vq-Ubr"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="fPp-ww-mEP" secondAttribute="trailing" id="5Se-lj-pbY"/>
+                        <constraint firstAttribute="height" constant="40" id="Bqp-KY-3Rx"/>
+                        <constraint firstItem="DoH-sH-DtZ" firstAttribute="top" secondItem="h8C-uY-nt0" secondAttribute="top" id="Ncy-EH-xbk"/>
+                        <constraint firstItem="kII-1Z-Qeb" firstAttribute="top" secondItem="h8C-uY-nt0" secondAttribute="top" id="UQD-9c-76a"/>
+                        <constraint firstItem="DoH-sH-DtZ" firstAttribute="centerX" secondItem="h8C-uY-nt0" secondAttribute="centerX" id="Xng-Ed-h4h"/>
+                        <constraint firstItem="fPp-ww-mEP" firstAttribute="leading" secondItem="h8C-uY-nt0" secondAttribute="leading" id="aUn-4z-EFW"/>
+                        <constraint firstAttribute="width" constant="64" id="ecC-ei-lpK"/>
+                        <constraint firstAttribute="trailing" secondItem="kII-1Z-Qeb" secondAttribute="trailing" id="qEK-Ml-h6e"/>
+                        <constraint firstItem="kII-1Z-Qeb" firstAttribute="leading" secondItem="h8C-uY-nt0" secondAttribute="leading" id="rB7-MO-MHB"/>
+                        <constraint firstAttribute="bottom" secondItem="kII-1Z-Qeb" secondAttribute="bottom" id="rOt-bJ-hpP"/>
+                        <constraint firstAttribute="bottom" secondItem="fPp-ww-mEP" secondAttribute="bottom" id="yEA-BB-ELx"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pxf-aw-wzj">
+                    <rect key="frame" x="258.5" y="26" width="64" height="40"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRODUCTS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lhJ-DW-jtl">
+                            <rect key="frame" x="-0.5" y="27" width="64" height="13"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="13" id="T4q-Tv-W6e"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="SFProText-Semibold" family="SF Pro Text" pointSize="11"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tag-cut" translatesAutoresizingMaskIntoConstraints="NO" id="1f4-iz-PVd">
+                            <rect key="frame" x="21" y="1" width="21" height="21"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="21" id="9ge-ex-dKc"/>
+                                <constraint firstAttribute="height" constant="21" id="REb-PW-y0o"/>
+                            </constraints>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mGG-Jd-LmN">
+                            <rect key="frame" x="0.0" y="0.0" width="64" height="40"/>
+                            <connections>
+                                <action selector="productsTapped:" destination="-1" eventType="touchUpInside" id="1fY-XD-0Fk"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="mGG-Jd-LmN" secondAttribute="trailing" id="0tb-yi-p7o"/>
+                        <constraint firstItem="lhJ-DW-jtl" firstAttribute="leading" secondItem="pxf-aw-wzj" secondAttribute="leading" id="1Fe-8Z-IUR"/>
+                        <constraint firstAttribute="bottom" secondItem="lhJ-DW-jtl" secondAttribute="bottom" id="6Ze-sO-C1F"/>
+                        <constraint firstAttribute="height" constant="40" id="8Xb-ol-ICT"/>
+                        <constraint firstAttribute="bottom" secondItem="mGG-Jd-LmN" secondAttribute="bottom" id="E3k-XJ-SeV"/>
+                        <constraint firstItem="1f4-iz-PVd" firstAttribute="top" secondItem="pxf-aw-wzj" secondAttribute="top" constant="1" id="Fet-lX-nlx"/>
+                        <constraint firstAttribute="width" constant="64" id="Oaq-9D-wl0"/>
+                        <constraint firstItem="mGG-Jd-LmN" firstAttribute="top" secondItem="pxf-aw-wzj" secondAttribute="top" id="TAS-8h-cbA"/>
+                        <constraint firstItem="mGG-Jd-LmN" firstAttribute="leading" secondItem="pxf-aw-wzj" secondAttribute="leading" id="Tv1-Xi-L8C"/>
+                        <constraint firstAttribute="trailing" secondItem="lhJ-DW-jtl" secondAttribute="trailing" id="iHb-6Q-6oz"/>
+                        <constraint firstItem="1f4-iz-PVd" firstAttribute="centerX" secondItem="pxf-aw-wzj" secondAttribute="centerX" id="lt8-iL-5Pv"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <constraints>
+                <constraint firstItem="cgY-OW-0Pe" firstAttribute="bottom" secondItem="xAE-k7-iTD" secondAttribute="bottom" id="0Md-3S-tvT"/>
+                <constraint firstItem="xAE-k7-iTD" firstAttribute="leading" secondItem="cgY-OW-0Pe" secondAttribute="leading" id="IEf-2b-wTq"/>
+                <constraint firstItem="DeC-9r-wvw" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="J8Z-57-HQc"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="h8C-uY-nt0" secondAttribute="bottom" constant="6" id="ORV-Ln-MEF"/>
+                <constraint firstItem="DeC-9r-wvw" firstAttribute="top" secondItem="xAE-k7-iTD" secondAttribute="top" id="TLV-px-LRl"/>
+                <constraint firstItem="cgY-OW-0Pe" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" constant="-6" id="XKB-tF-HVN"/>
+                <constraint firstItem="h8C-uY-nt0" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" multiplier="0.45" id="ZPy-c6-wcu"/>
+                <constraint firstItem="cgY-OW-0Pe" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="eCw-ma-2LW"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="DeC-9r-wvw" secondAttribute="bottom" constant="25" id="kzD-Ew-Syd"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="pxf-aw-wzj" secondAttribute="bottom" constant="6" id="nPy-xX-nE1"/>
+                <constraint firstItem="pxf-aw-wzj" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" multiplier="1.55" id="p8C-VH-eBX"/>
+                <constraint firstItem="DeC-9r-wvw" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="19" id="pCc-qH-ySb"/>
+                <constraint firstItem="xAE-k7-iTD" firstAttribute="trailing" secondItem="cgY-OW-0Pe" secondAttribute="trailing" id="sPi-NK-wL0"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="33.5" y="-234"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="cards" width="24" height="24"/>
+        <image name="tag-cut" width="23" height="23"/>
+        <image name="trophy" width="27" height="30"/>
+    </resources>
+</document>

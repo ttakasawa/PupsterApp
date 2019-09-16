@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>aps-environment</key>
+	<string>development</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:pupster.app.link</string>
+		<string>applinks:pupster-alternate.app.link</string>
+		<string>applinks:pupster.test-app.link</string>
+		<string>applinks:pupster-alternate.test-app.link</string>
+	</array>
+	<key>com.apple.developer.default-data-protection</key>
+	<string>NSFileProtectionComplete</string>
+	<key>com.apple.developer.in-app-payments</key>
+	<array>
+		<string>merchant.com.mymoxiedog.moxie.debug</string>
+		<string>merchant.com.pupster</string>
+	</array>
+	<key>com.apple.developer.pass-type-identifiers</key>
+	<array>
+		<string>$(TeamIdentifierPrefix)*</string>
+	</array>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)group.mymoxiedog</string>
+		<string>$(AppIdentifierPrefix)group.pupster</string>
+	</array>
+</dict>
+</plist>

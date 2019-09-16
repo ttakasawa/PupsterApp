@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Semibold.otf">
+            <string>SFProDisplay-Semibold</string>
+        </array>
+        <array key="SF-Pro-Text-Bold.otf">
+            <string>SFProText-Bold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="89" id="KGk-i7-Jjw" customClass="LFFieldCell" customModule="moxie" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="89"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="88.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FIELD NAME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rTQ-wJ-NBd">
+                        <rect key="frame" x="24" y="16" width="272" height="19"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="19" id="FUy-kv-i82"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="SFProText-Bold" family="SF Pro Text" pointSize="13"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="R5j-Oc-qDI">
+                        <rect key="frame" x="24" y="49" width="272" height="30"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="vB3-8X-h4i"/>
+                        </constraints>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="23"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y1S-Uq-ADQ">
+                        <rect key="frame" x="24" y="87.5" width="272" height="1"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="VDa-dg-3Jd"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="R5j-Oc-qDI" firstAttribute="top" secondItem="rTQ-wJ-NBd" secondAttribute="bottom" constant="14" id="8Gf-7C-WGh"/>
+                    <constraint firstItem="y1S-Uq-ADQ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="24" id="ElS-6X-t3g"/>
+                    <constraint firstAttribute="trailing" secondItem="rTQ-wJ-NBd" secondAttribute="trailing" constant="24" id="GWU-I5-nLg"/>
+                    <constraint firstAttribute="trailing" secondItem="y1S-Uq-ADQ" secondAttribute="trailing" constant="24" id="P0M-lc-gmD"/>
+                    <constraint firstItem="rTQ-wJ-NBd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="24" id="QvB-Tz-frM"/>
+                    <constraint firstAttribute="bottom" secondItem="y1S-Uq-ADQ" secondAttribute="bottom" id="SfE-Bt-HaY"/>
+                    <constraint firstItem="rTQ-wJ-NBd" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="16" id="nwO-Qp-SuX"/>
+                    <constraint firstAttribute="trailing" secondItem="R5j-Oc-qDI" secondAttribute="trailing" constant="24" id="oFm-SU-ymP"/>
+                    <constraint firstItem="R5j-Oc-qDI" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="24" id="y2R-Ys-YUD"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="fieldNameLbl" destination="rTQ-wJ-NBd" id="Gp0-x6-RB1"/>
+                <outlet property="fieldSeparatorView" destination="y1S-Uq-ADQ" id="ukb-aB-BGI"/>
+                <outlet property="textField" destination="R5j-Oc-qDI" id="OPW-Zy-Rgx"/>
+            </connections>
+            <point key="canvasLocation" x="34" y="77.5"/>
+        </tableViewCell>
+    </objects>
+</document>

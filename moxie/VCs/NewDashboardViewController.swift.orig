@@ -1,0 +1,779 @@
+//
+//  NewDashboardViewController.swift
+//  moxie
+//
+//  Created by Tomoki Takasawa on 9/3/18.
+//  Copyright © 2018 Tomoki Takasawa. All rights reserved.
+//
+
+import UIKit
+import BubbleTransition
+import SCLAlertView
+
+class NewDashboardViewController: UIViewController, UIViewControllerTransitioningDelegate, ImageProtocol, RootLevelViewControllerHelper {
+    var object: DashboardType!
+    var builder: NewDashBoardBuildable!               //all style related
+    
+    var network: TypeNetwork
+    
+    var recommendedArticle: Article?
+    var globalLessons: [GlobalLesson]?
+    
+    let scrollView = UIScrollView()
+    let baseView = UIView()
+    
+    var topTile: DashBoardCell?
+    var middleTile: DashBoardCell?
+    var bottomTile: DashBoardCell?
+    var footerTile: DashBoardCell?
+    
+    var user: UserData?
+    
+    let transition = BubbleTransition()
+    var imagePicker = UIImagePickerController()
+    
+    var userActivityPercentile: Int = 0
+    
+    init(network: TypeNetwork, dashboardBulder: NewDashBoardBuildable, object: DashboardType) {
+        self.object = object
+        self.builder = dashboardBulder
+        self.network = network
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.view.backgroundColor = .white
+        
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        
+        self.topTile = builder.createTopView()
+        self.middleTile = builder.createMiddleView()
+        self.bottomTile = builder.createBottomView()
+        self.footerTile = builder.createFooterView()
+        
+        self.configure()
+        self.constrain()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.updateView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.setNavigationItem()
+        
+        //self.pupserBase?.setTabBar(hidden: false)
+    }
+    
+    func updateView(){
+        //timely sensitive stuff, called from viewdidload and viewdidappear
+        //be extra safe
+        guard let user = self.user else { return }
+        guard let currentPercentileArray = self.perentileScoreArray else { return }
+        self.calculatePercentile(percentileArr: currentPercentileArray)
+        
+        if let userStatsTile = self.topTile as? UserProfileCell {
+            userStatsTile.updateProfile(data: user)
+        }
+        
+        if let subscriptionTile = self.bottomTile as? UpgradeCell {
+            subscriptionTile.updateView(data: user)
+        }
+        
+        self.network.checkMessage(user: user){ isUnread in
+            self.changeMessageIcon(isUnread: isUnread)
+        }
+        
+    }
+    
+    func deactivateCheckInButton(isActivated: Bool){
+        if let userStatsTile = self.topTile as? UserProfileCell {
+            userStatsTile.checkInButton.setIsActivated(isActivated: isActivated)
+        }
+    }
+    
+    func setNavigationItem(){
+        self.pupserBase?.navigationController?.navigationBar.isHidden = true
+        if (self.object.dashboardKind == .activity){
+            navigationItem.title = "Activities"
+        }else{
+            navigationItem.title = "Tracking"
+        }
+        navigationController?.navigationBar.prefersLargeTitles = true
+        let chatButton: UIBarButtonItem = {
+            let b = UIBarButtonItem()
+            b.image = #imageLiteral(resourceName: "chatIcon")
+            b.style = .plain
+            b.target = self
+            b.action = #selector(chatPressed)
+            b.tintColor = UIColor(red:0.09, green:0.75, blue:0.93, alpha:1)
+            return b
+        }()
+        
+        let devButton: UIBarButtonItem = {
+            let b = UIBarButtonItem()
+            b.image = #imageLiteral(resourceName: "chatIcon")
+            b.style = .plain
+            b.target = self
+            b.action = #selector(devModeActivate)
+            b.tintColor = UIColor(red:0.09, green:0.75, blue:0.93, alpha:1)
+            return b
+        }()
+        
+        self.navigationItem.rightBarButtonItem = chatButton
+        //self.tabBarController?.tabBar.isHidden = false
+<<<<<<< HEAD
+        self.pupserBase?.setTabBar(hidden: false)
+=======
+        
+>>>>>>> ed62a37328b5cb3b67c6fcfb6dcaad85f112db94
+        //self.navigationItem.leftBarButtonItem = devButton
+    }
+    
+   
+    
+    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        
+        if let tile = self.topTile as? UserProfileCell {
+            let topSafeArea = self.view.safeAreaInsets.top
+            transition.startingPoint = CGPoint(x: tile.checkInButton.center.x, y: tile.checkInButton.center.y + topSafeArea - self.scrollView.contentOffset.y)
+        }
+        
+        transition.transitionMode = .present
+        
+        transition.bubbleColor = UIColor(red:0.09, green:0.75, blue:0.93, alpha:1)
+        return transition
+    }
+    
+    public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        transition.transitionMode = .dismiss
+        //transition.startingPoint = CGPoint(x: (self.topTile?.center.x)! - 100.0, y: (self.topTile?.center.y)! + 150.0)
+        if let tile = self.topTile as? UserProfileCell {
+            let topSafeArea = self.view.safeAreaInsets.top
+            transition.startingPoint = CGPoint(x: tile.checkInButton.center.x, y: tile.checkInButton.center.y + topSafeArea - self.scrollView.contentOffset.y)
+        }
+        transition.bubbleColor = UIColor(red:0.09, green:0.75, blue:0.93, alpha:1)
+        return transition
+    }
+    
+    func changeMessageIcon(isUnread: Bool){
+        if isUnread {
+            self.navigationItem.rightBarButtonItem?.image = #imageLiteral(resourceName: "chatIconUnread")
+        }else{
+            self.navigationItem.rightBarButtonItem?.image = #imageLiteral(resourceName: "chatIcon")
+        }
+    }
+    
+    
+    func configure(){
+        //topTile
+        self.showLoading()
+        self.network.queryUser { (user, error) in
+            
+            guard let user = user else { return }
+            guard let program = user.programs?[0] else { return }
+            
+            self.network.user = user
+            self.user = self.network.user    //id    String    "9pXwaz1BtmbCxtxRTq7T8hyWNJG3"
+            
+            
+            
+            if let isUnread = self.user?.isUnreadMessage {
+                self.changeMessageIcon(isUnread: isUnread)
+            }
+            
+            if let profileUrl = self.user?.userProfileImageUrl {
+                self.downloadImage(stringUrl: profileUrl, completion: { (image) in
+                    Global.network.userProfileImage = image
+                })
+            }
+            
+            let currentLessonId = program.currentLessonId
+            let secondLessonId = program.nextLessonId
+            
+            var recommendedArticleIdArray = program.getSubProgramArticleIds(lessonId: currentLessonId)
+            let copiedArticleArray = recommendedArticleIdArray
+            
+            var index: Int = 0
+            for _ in 0..<recommendedArticleIdArray.count {
+                if let readArticles = user.readArticleIds {
+                    for j in 0..<readArticles.count {
+                        if recommendedArticleIdArray[index] == readArticles[j]{
+                            recommendedArticleIdArray.remove(at: index)
+                            index = index - 1
+                            break
+                        }
+                    }
+                }
+                index = index + 1
+            }
+            if recommendedArticleIdArray.count == 0 {
+                recommendedArticleIdArray = copiedArticleArray
+            }
+            
+            let randomIndex = Int(arc4random_uniform(UInt32(recommendedArticleIdArray.count)))
+            
+            var todayArticle = ""
+            if recommendedArticleIdArray.count == 0 {
+                todayArticle = "Car-Safety-for-Your-Dog"
+            }else{
+                if recommendedArticleIdArray[randomIndex] == "" {
+                    recommendedArticleIdArray[randomIndex] = "Car-Safety-for-Your-Dog"
+                }
+                
+                todayArticle = recommendedArticleIdArray[randomIndex]
+            }
+            
+            
+            if self.object.dashboardKind == .activity {
+                
+                self.network.getLessonContent(lessonId: currentLessonId, completion: { (lesson) in
+                    self.globalLessons?.append(lesson)
+                    let programInterface = ProgramInterface(program: program, lesson: lesson)
+                    
+                    self.builder.configureTopView(data: programInterface)
+                })
+                
+                self.network.getLessonContent(lessonId: secondLessonId, completion: { (lesson) in
+                    self.globalLessons?.append(lesson)
+                    let programInterface = ProgramInterface(program: program, lesson: lesson)
+                    self.builder.configureMiddleView(data: programInterface)
+                })
+                
+                
+                self.network.getArticleContent(articleId: todayArticle, completion: { (content) in
+                    self.recommendedArticle = content
+                    self.builder.configureBottomView(data: content)
+                })
+                
+                self.builder.configureFooterView(data: user)
+                
+                self.hideLoading()
+                
+                
+            }else{
+                
+                self.network.queryRankingPercentile(completion: { (percentileArr) in
+                    
+                    Global.network.perentileScoreArray = percentileArr
+                    self.user?.percentMostActive = Global.network.calculatePercentile(percentileArr: percentileArr, user: self.user!)
+                    
+                    //self.calculatePercentile(percentileArr: percentileArr)
+                    
+                    
+                    self.builder.configureTopView(data: user)
+                    self.builder.configureMiddleView(data: user)
+                    self.builder.configureBottomView(data: user)
+                    self.builder.configureFooterView(data: user)
+                    
+                    self.updateView()
+                    self.hideLoading()
+                })
+                
+            }
+            
+            self.showDescription(type: self.object.dashboardKind == .activity ? ViewControllerKind.activity : ViewControllerKind.tracking, network: self.network, user: self.network.user)
+            
+        }
+    }
+    
+    
+    var perentileScoreArray: [Int]?
+    func calculatePercentile(percentileArr: [Int]){
+        var abovePercentileIndex: Int = 9
+        
+        if let weeklyEarning = self.user?.weeklyEarnedTrophyQuantity {
+            self.perentileScoreArray = percentileArr
+            for i in 0..<percentileArr.count {
+                if weeklyEarning < percentileArr[i] {
+                    
+                    abovePercentileIndex = i
+                    break
+                }else{
+                    
+                }
+            }
+            
+            var abovePercentile: Int = 0
+            var belowPercentile: Int = 0
+            
+            var percentile: Int = 0
+            
+            if abovePercentileIndex == 9 {
+                percentile = 90
+                
+            }else if abovePercentileIndex > 0 {
+                abovePercentile = percentileArr[abovePercentileIndex]
+                belowPercentile = percentileArr[abovePercentileIndex - 1]
+                let lastDigit = Int((Double(weeklyEarning - belowPercentile) / Double(abovePercentile - belowPercentile)) * 10)
+                percentile = (abovePercentileIndex - 1) * 10 + lastDigit
+                
+            }else{
+                abovePercentile = percentileArr[abovePercentileIndex]
+                belowPercentile = 0
+                let lastDigit = Int((Double(weeklyEarning - belowPercentile) / Double(abovePercentile - belowPercentile)) * 10)
+                
+                percentile = lastDigit
+            }
+            
+            self.userActivityPercentile = percentile
+        }else{
+            self.userActivityPercentile = 50
+        }
+        
+        if(self.userActivityPercentile < 10){
+            self.user?.percentMostActive = 10
+        }else{
+            self.user?.percentMostActive = self.userActivityPercentile
+        }
+        
+    }
+    
+    func constrain(){
+        
+        guard let topTile = topTile else { return }
+        guard let middleTile = middleTile else { return }
+        guard let bottomTile = bottomTile else { return }
+        guard let footerTile = footerTile else { return }
+        
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        baseView.translatesAutoresizingMaskIntoConstraints = false
+        topTile.translatesAutoresizingMaskIntoConstraints = false
+        middleTile.translatesAutoresizingMaskIntoConstraints = false
+        bottomTile.translatesAutoresizingMaskIntoConstraints = false
+        footerTile.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.view.addSubview(scrollView)
+        self.scrollView.addSubview(baseView)
+        self.baseView.addSubview(topTile)
+        self.baseView.addSubview(middleTile)
+        self.baseView.addSubview(bottomTile)
+        
+        if self.object.dashboardKind == .activity{
+            self.baseView.addSubview(footerTile)
+        }
+        
+        
+        
+        
+        topTile.leftAnchor.constraint(equalTo: self.baseView.leftAnchor, constant: 7).isActive = true
+        topTile.topAnchor.constraint(equalTo: self.baseView.topAnchor, constant: 15).isActive = true
+        topTile.centerXAnchor.constraint(equalTo: self.baseView.centerXAnchor).isActive = true
+        
+        
+        
+        middleTile.leftAnchor.constraint(equalTo: self.baseView.leftAnchor, constant: 7).isActive = true
+        middleTile.topAnchor.constraint(equalTo: topTile.bottomAnchor, constant: 15).isActive = true
+        middleTile.centerXAnchor.constraint(equalTo: self.baseView.centerXAnchor).isActive = true
+        
+        
+        
+        bottomTile.leftAnchor.constraint(equalTo: self.baseView.leftAnchor, constant: 7).isActive = true
+        bottomTile.topAnchor.constraint(equalTo: middleTile.bottomAnchor, constant: 15).isActive = true
+        bottomTile.centerXAnchor.constraint(equalTo: self.baseView.centerXAnchor).isActive = true
+        
+        if self.object.dashboardKind == .activity{
+            footerTile.leftAnchor.constraint(equalTo: self.baseView.leftAnchor, constant: 7).isActive = true
+            footerTile.topAnchor.constraint(equalTo: bottomTile.bottomAnchor, constant: 15).isActive = true
+            footerTile.centerXAnchor.constraint(equalTo: self.baseView.centerXAnchor).isActive = true
+            
+            
+            self.scrollView.bottomAnchor.constraint(equalTo: footerTile.bottomAnchor, constant: 15).isActive = true
+        }else{
+            self.scrollView.bottomAnchor.constraint(equalTo: bottomTile.bottomAnchor, constant: 15).isActive = true
+        }
+        
+        
+        
+        self.scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        self.scrollView.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor).isActive = true
+        self.scrollView.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor).isActive = true
+        self.scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        
+        self.baseView.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
+        self.baseView.leftAnchor.constraint(equalTo: self.scrollView.leftAnchor).isActive = true
+        self.baseView.rightAnchor.constraint(equalTo: self.scrollView.rightAnchor).isActive = true
+        self.baseView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
+        self.baseView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor).isActive = true
+        
+        
+    }
+    
+    func updateLessonView(program: Program){
+        let currentLessonId = program.currentLessonId
+        let secondLessonId = program.nextLessonId
+        
+        self.globalLessons = []
+        
+        self.network.getLessonContent(lessonId: currentLessonId, completion: { (lesson) in
+            self.globalLessons?.append(lesson)
+            let programInterface = ProgramInterface(program: program, lesson: lesson)
+            
+            if let top = self.topTile as? LessonCell {
+                top.update(data: programInterface)
+            }
+        })
+        
+        self.network.getLessonContent(lessonId: secondLessonId, completion: { (lesson) in
+            self.globalLessons?.append(lesson)
+            let programInterface = ProgramInterface(program: program, lesson: lesson)
+            if let middle = self.middleTile as? LessonCell {
+                middle.update(data: programInterface)
+            }
+        })
+        
+        
+        if let bottom = self.footerTile as? ProgressCell {
+            guard let user = self.user else { return }
+            bottom.update(data: user)
+        }
+    }
+    
+}
+
+extension NewDashboardViewController: VideoProtocol {
+    func playLesson(token: String){
+        self.playVideo(with: VideoDataSource.wistia, token: token)
+    }
+}
+
+
+@objc
+extension NewDashboardViewController {
+    
+    func videoPlayPressed(sender: PlayVideoButton){
+        self.playLesson(token: sender.videoUrl!)
+    }
+    
+    func devModeActivate(){
+        //dev purpose
+        UserManager.shared.populateDB()
+    }
+    
+    func chatPressed(){
+        //to chat room
+        guard let user = self.user else { return }
+        self.pupserBase?.navigationController?.navigationBar.isHidden = false
+        self.pupserBase?.navigationController?.pushViewController(ChatViewController(network: self.network, user: user), animated: true)
+        
+//        if let navigator = self.navigationController {
+//            let vc = ChatViewController(network: self.network, user: user)
+//            navigator.pushViewController(vc, animated: true)
+//        }
+    }
+    
+    func toCheckIn(sender: DashBoardButton){
+        //check in
+        if(sender.isSelected){
+            if self.user != nil {
+                let vc = CheckInViewController(user: self.user!, network: self.network)
+                vc.transitioningDelegate = self
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true, completion: nil)
+            }
+        }else{
+            SCLAlertView().showWarning("Hello there", subTitle: "It seems you have completed a check in for today! Please come back tomorrow.")
+        }
+        
+    }
+    
+    func viewProgramPressed(){
+        //view program
+        if let navigator = self.navigationController {
+            let vc = ProgramContentsTableViewController(network: self.network, user: self.user!)
+            navigator.pushViewController(vc, animated: true)
+        }
+    }
+    
+    func subscriptionPressed(){
+        //subscription pressed
+        let vc = UpgradeViewController(network: self.network)
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func viewArticle(){
+        //view article
+        if let navigator = self.navigationController {
+            let vc = ArticleViewController(article: self.recommendedArticle!, network: self.network, user: self.user!)
+            navigator.pushViewController(vc, animated: true)
+        }
+    }
+    
+    
+    func completeLesson(sender: DashBoardButton){
+        
+        let appearance = SCLAlertView.SCLAppearance(
+            showCircularIcon: true
+        )
+        let lessonCompletePopUp = SCLAlertView(appearance: appearance)
+        let alertViewIcon = #imageLiteral(resourceName: "alertIcon_LessonComplete")
+        
+        //let lessonCompletePopUp = SCLAlertView()
+        
+
+        lessonCompletePopUp.addButton("MASTERED") {
+            self.placeCongratsView()
+            
+            if let userProgram = self.user?.programs![0] {
+                
+                self.network.markComplete(lessonId: sender.actionKey!, user: self.user!, userProgram: userProgram)
+                //if
+                self.updateLessonView(program: userProgram)
+            }
+            
+        }
+        
+        lessonCompletePopUp.showWarning("Ready to move on to your next mission?", subTitle: "", closeButtonTitle: "NOT YET", circleIconImage: alertViewIcon)
+        
+        
+    }
+    
+    
+    
+    func placeCongratsView(){
+        let congratsView = LessonCompleteView(name: "", image: Global.network.userProfileImage, imageUrl: self.user?.userProfileImageUrl)
+        congratsView.translatesAutoresizingMaskIntoConstraints = false
+        
+//        self.tabBarController?.view.addSubview(congratsView)
+//
+//        congratsView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+//        congratsView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+//        congratsView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+//        congratsView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+//
+        
+        guard let baseVC = self.pupserBase else { return }
+        baseVC.view.addSubview(congratsView)
+        //Exception Here
+        congratsView.topAnchor.constraint(equalTo: baseVC.view.topAnchor).isActive = true
+        congratsView.bottomAnchor.constraint(equalTo: baseVC.view.bottomAnchor).isActive = true
+        congratsView.leftAnchor.constraint(equalTo: baseVC.view.leftAnchor).isActive = true
+        congratsView.rightAnchor.constraint(equalTo: baseVC.view.rightAnchor).isActive = true
+        
+        //UIApplication.shared.keyWindow!.bringSubview(toFront: congratsView)
+    }
+    
+    
+    
+    func changeProfileImage(){
+        
+        imagePicker.mediaTypes = ["public.image"]
+        imagePicker.delegate = self
+        
+        let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
+            self.openCamera()
+        }))
+        alert.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in
+            self.openGallary()
+        }))
+        alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+}
+
+
+
+
+
+
+
+extension NewDashboardViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+    //definitely find a way to do this in protocol. Same code reside in two places.. No good
+    
+    func openCamera(){
+        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera))
+        {
+            imagePicker.sourceType = UIImagePickerControllerSourceType.camera
+            imagePicker.allowsEditing = true
+            self.present(imagePicker, animated: true, completion: nil)
+        }else{
+            let alert  = UIAlertController(title: "Warning", message: "You don't have camera", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func openGallary(){
+        imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        imagePicker.allowsEditing = true
+        self.present(imagePicker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        var chosenImage: UIImage?
+        
+        if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
+            chosenImage = editedImage
+        }else if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            chosenImage = originalImage
+        }
+        
+        if let selectedImage = chosenImage {
+            
+            self.network.storeUserProfileImage(image: selectedImage, user: self.user!)
+            if let topView = self.topTile as? UserProfileCell {
+                topView.insertImage(image: selectedImage)
+                Global.network.userProfileImage = selectedImage
+            }
+        }
+        dismiss(animated:true, completion: nil)
+    }
+
+}
+
+
+extension NewDashboardViewController {
+    func addNotificationDate(dow: DayOfWeek){
+        guard let user = self.user else { return }
+        var newDates:[DayOfWeek] = []
+        var newStatus: UserNotificationStatus!
+        if var currentStatus = user.notificationStatus {
+            if let currentDates = currentStatus.notificationDates {
+                newDates = currentDates
+            }
+            newDates.append(dow)
+            newStatus = UserNotificationStatus(notificationTime: currentStatus.notificationTime, isNotificationOn: true, notificationDates: newDates)
+            currentStatus.notificationDates = newDates
+        }else{
+            newStatus = UserNotificationStatus(notificationTime: 19, isNotificationOn: true, notificationDates: [dow])
+            
+        }
+        user.notificationStatus = newStatus
+        self.network.setNotification(user: user, actionType: NotificationActionType.activateIndividualNotification, dowChanged: dow)
+        self.turnOnToggle()
+    }
+    
+    func removeNotificationDate(dow: DayOfWeek){
+        guard let user = self.user else { return }
+        var newDates:[DayOfWeek] = []
+        var newStatus: UserNotificationStatus!
+        
+        if let currentStatus = user.notificationStatus {
+            guard let statusArray = currentStatus.notificationDates else { return }
+            for i in 0..<statusArray.count {
+                if(statusArray[i] != dow){
+                    newDates.append(statusArray[i])
+                }
+            }
+            newStatus = UserNotificationStatus(notificationTime: currentStatus.notificationTime, isNotificationOn: currentStatus.isNotificationOn, notificationDates: newDates)
+        }
+        user.notificationStatus = newStatus
+        
+        self.network.setNotification(user: user, actionType: NotificationActionType.cancelIndividualNotification, dowChanged: dow)
+    }
+    
+    func removeAllNotifications(){
+        guard let user = self.user else { return }
+        var newStatus: UserNotificationStatus!
+        if let currentStatus = user.notificationStatus {
+            newStatus = UserNotificationStatus(notificationTime: currentStatus.notificationTime, isNotificationOn: false, notificationDates: [])
+        }else{
+            newStatus = UserNotificationStatus(notificationTime: 19, isNotificationOn: false, notificationDates: [])
+        }
+        
+        user.notificationStatus = newStatus
+        
+        self.network.setNotification(user: user, actionType: .cancelAllNotification)
+        self.resetAllButton()
+    }
+    
+    func setTime(timeInt: Int){
+        print(timeInt)
+        guard let user = self.user else { return }
+        var newStatus: UserNotificationStatus!
+        if var currentStatus = user.notificationStatus {
+            newStatus = UserNotificationStatus(notificationTime: timeInt, isNotificationOn: currentStatus.isNotificationOn, notificationDates: currentStatus.notificationDates)
+            currentStatus = newStatus
+        }else{
+            newStatus = UserNotificationStatus(notificationTime: timeInt, isNotificationOn: false, notificationDates: [])
+        }
+        
+        user.notificationStatus = newStatus
+        
+        self.network.setNotification(user: user, actionType: .updateTime)
+        if let reminderCell = self.middleTile as? ReminderCell {
+            reminderCell.changeTimeValue()
+        }
+    }
+    func turnOnToggle(){
+        if let reminderCell = self.middleTile as? ReminderCell {
+            reminderCell.notificationSwitch.setOn(true, animated: true)
+        }
+    }
+    
+    func resetAllButton(){
+        if let reminderCell = self.middleTile as? ReminderCell {
+            reminderCell.initializeAllButton()
+        }
+    }
+}
+
+@objc extension NewDashboardViewController {
+    
+    func sunPressed(sender: ReminderDateButton){
+        sender.isSelected ? addNotificationDate(dow: .Sun) : removeNotificationDate(dow: .Sun)
+    }
+    
+    func monPressed(sender: ReminderDateButton){
+        sender.isSelected ? addNotificationDate(dow: .Mon) : removeNotificationDate(dow: .Mon)
+    }
+    
+    func tuePressed(sender: ReminderDateButton){
+        sender.isSelected ? addNotificationDate(dow: .Tue) : removeNotificationDate(dow: .Tue)
+    }
+    func wedPressed(sender: ReminderDateButton){
+        sender.isSelected ? addNotificationDate(dow: .Wed) : removeNotificationDate(dow: .Wed)
+    }
+    
+    func thuPressed(sender: ReminderDateButton){
+        sender.isSelected ? addNotificationDate(dow: .Thu) : removeNotificationDate(dow: .Thu)
+    }
+    
+    func friPressed(sender: ReminderDateButton){
+        sender.isSelected ? addNotificationDate(dow: .Fri) : removeNotificationDate(dow: .Fri)
+    }
+    
+    func satPressed(sender: ReminderDateButton){
+        sender.isSelected ? addNotificationDate(dow: .Sat) : removeNotificationDate(dow: .Sat)
+    }
+    
+    func notificationToggled(sender: UISwitch){
+        if (sender.isOn == false){
+            removeAllNotifications()
+        }
+    }
+    
+    func timeSelectionPressed(sender: UIButton){
+        let alert = UIAlertController(title: "Set Reminder Time", message: nil, preferredStyle: .actionSheet)
+        for i in 0..<24 {
+            var stringVal: String = ""
+            if i < 13 {
+                stringVal = String(describing: i) + ":00 AM"
+            }else{
+                stringVal = String(describing: i - 12) + ":00 PM"
+            }
+            alert.addAction(UIAlertAction(title: stringVal, style: .default, handler: { _ in
+                self.setTime(timeInt: i)
+            }))
+        }
+        alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+}
+
+
+extension NewDashboardViewController: LoadingHandling {
+    func recovery() { }
+}
+

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Text-Bold.otf">
+            <string>SFProText-Bold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="103" id="KGk-i7-Jjw" customClass="LFSelectionCell" customModule="moxie" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="103"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="102.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DOG’S GENDER" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j1d-Pb-J02">
+                        <rect key="frame" x="24" y="16" width="272" height="19"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="19" id="YnN-N4-oM9"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="SFProText-Bold" family="SF Pro Text" pointSize="13"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="CuW-KB-azl">
+                        <rect key="frame" x="35" y="45" width="250" height="54"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wbH-lU-f58" customClass="PLFButton" customModule="moxie" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="105" height="54"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="105" id="X7P-mL-qv0"/>
+                                    <constraint firstAttribute="height" constant="54" id="aQ6-Sv-mTY"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="SFProText-Bold" family="SF Pro Text" pointSize="15"/>
+                                <state key="normal" title="GIRL">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="girlTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="fSH-ak-t3J"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JNP-Il-baW" customClass="PLFButton" customModule="moxie" customModuleProvider="target">
+                                <rect key="frame" x="145" y="0.0" width="105" height="54"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="54" id="BlD-VU-JUy"/>
+                                    <constraint firstAttribute="width" constant="105" id="ypz-0n-gvr"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="SFProText-Bold" family="SF Pro Text" pointSize="15"/>
+                                <state key="normal" title="BOY">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="boyTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="qpY-BQ-vyG"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                    </stackView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="j1d-Pb-J02" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="24" id="6uQ-Jf-gcv"/>
+                    <constraint firstItem="CuW-KB-azl" firstAttribute="top" secondItem="j1d-Pb-J02" secondAttribute="bottom" constant="10" id="Fyk-td-31z"/>
+                    <constraint firstItem="CuW-KB-azl" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="MaH-P6-FvK"/>
+                    <constraint firstAttribute="trailing" secondItem="j1d-Pb-J02" secondAttribute="trailing" constant="24" id="W2A-Xc-3Ji"/>
+                    <constraint firstItem="j1d-Pb-J02" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="16" id="qoW-2r-j2q"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="boyBtn" destination="JNP-Il-baW" id="1bP-OF-xkn"/>
+                <outlet property="fieldNameLbl" destination="j1d-Pb-J02" id="EXX-1L-YbY"/>
+                <outlet property="girlBtn" destination="wbH-lU-f58" id="E1l-TQ-S6K"/>
+            </connections>
+            <point key="canvasLocation" x="34" y="83.5"/>
+        </tableViewCell>
+    </objects>
+</document>
