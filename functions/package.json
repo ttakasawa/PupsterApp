@@ -13,8 +13,8 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "express-shopify-webhooks": "^1.0.0",
-    "firebase-admin": "~5.12.1",
-    "firebase-functions": "^1.0.3",
+    "firebase-admin": "~11.4.1",
+    "firebase-functions": "^4.1.1",
     "node-fetch": "^2.1.2",
     "npm": "^6.1.0",
     "stripe": "^6.0.0"
